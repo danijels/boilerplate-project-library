@@ -91,5 +91,4 @@ module.exports = function (app) {
         res.json('delete successful');
       })
     });
-  
 };
