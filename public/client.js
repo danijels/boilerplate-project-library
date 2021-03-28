@@ -36,13 +36,13 @@ async function showBook(passedId) {
   const data = await fetch(`/api/books/${passedId}`, { method: 'GET' });
   const book = await data.json();
 
-  if (book.error) {
+  if (!book.title) {
     bookDetail.style.visibility = 'hidden';
     messages.style.visibility = 'visible';
     messages.innerText = 'Sorry, we couldn\'t find this book...'
     return;
   }
-  
+
   messages.style.visibility = 'hidden';
   bookDetail.style.visibility = 'visible';
   bookTitle.innerText = book.title;
