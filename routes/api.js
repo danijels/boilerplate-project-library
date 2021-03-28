@@ -6,7 +6,7 @@ module.exports = function (app) {
   app.route('/api/books')
     .get(function (req, res){
       Book.find({}, (err, books) => {
-        if (err) return console.log(err);
+        if (err) return res.json(err);
         const result = books.map(book => ({ 
           title: book.title, 
           _id: book._id,
