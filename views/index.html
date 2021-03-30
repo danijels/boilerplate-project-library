@@ -17,8 +17,12 @@
         <button id="get-book-submit">Show the book</button>
       </form>
       <form id='new-book-form'>
-        <label for='new-book-text'>Title</label>
-        <input type="text" name="new-book-text" id="new-book-text" required/>
+        <label for='new-book-title' class='new-book'>
+          <span>Title </span><input type="text" name="new-book-title" id="new-book-title" required/>
+        </label>
+        <label for='new-book-author' class='new-book'>
+          <span>Author </span><input type="text" name="new-book-author" id="new-book-author" required/>
+        </label>
         <button id="new-book-submit">Submit</button>
       </form>
       <ul id='book-list'></ul>
@@ -37,6 +41,7 @@
         </form>        
         <ul id='comments'></ul>
         <button id="delete-one-book">Delete this book</button>
+        <button id="delete-all-comments">Delete all comments</button>
       </div>
     </div>
   </main>

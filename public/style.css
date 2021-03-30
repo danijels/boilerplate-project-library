@@ -37,6 +37,8 @@ input[type='text']:focus {
 }
 
 li {
+  display: flex;
+  justify-content: space-between;
   list-style-type: none;
   margin: 0.3rem;
   padding: 1rem;
@@ -60,9 +62,24 @@ ul {
   box-shadow: none;
 }
 
+.new-book {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  width: 65%;
+}
+
+.time-tag {
+  bottom: 0;
+  font-size: 0.7rem;
+  position: absolute;
+  right: 0;
+}
+
 #comments li {
   text-align: left;
   border: 0.1rem solid rgb(200, 200, 200);
+  position: relative;
 }
 
 #book-detail {
