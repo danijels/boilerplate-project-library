@@ -10,36 +10,46 @@
     <h1>Library</h1>
   </header>
   <main>
-    <div id='left'>
-      <form id='get-book-form'>
+    <div id="left">
+      <form id="get-book-form">
         <label for="get-book-text">Book ID</label>
         <input type="text" name="get-book-text" id="get-book-text" required/>
         <button id="get-book-submit">Show the book</button>
       </form>
-      <form id='new-book-form'>
-        <label for='new-book-title' class='new-book'>
+      <form id="new-book-form">
+        <label for="new-book-title" class="new-book">
           <span>Title </span><input type="text" name="new-book-title" id="new-book-title" required/>
         </label>
-        <label for='new-book-author' class='new-book'>
+        <label for="new-book-author" class="new-book">
           <span>Author </span><input type="text" name="new-book-author" id="new-book-author" required/>
         </label>
         <button id="new-book-submit">Submit</button>
       </form>
-      <ul id='book-list'></ul>
+      <ul id="book-list"></ul>
+      <div class="pagination">
+        <button id="next-books" class="page-button" disabled>Next</button>
+        <p><span id="curr-books">X</span> of <span id="total-books">X</span></p>
+        <button id="prev-books" class="page-button" disabled>Prev</button>
+      </div>
       <button id="delete-all-books">Delete all books</button>
     </div>
   
-    <div id='right'>
-      <p id='messages'></p>
-      <div id='book-detail'>
-        <h2 id='book-title'></h2>
-        <p id='current-book-id'></p>
-        <form id='comment-form'>
+    <div id="right">
+      <p id="messages"></p>
+      <div id="book-detail">
+        <h2 id="book-title"></h2>
+        <p id="current-book-id"></p>
+        <form id="comment-form">
           <label for="comment-text">Comment</label>
           <input type="text" name="comment-text" id="comment-text" required/>
           <button id="comment-submit">Add the comment</button>
         </form>        
-        <ul id='comments'></ul>
+        <ul id="comments"></ul>
+        <div class="pagination">
+          <button id="next-comments" class="page-button" disabled>Next</button>
+          <p><span id="curr-comments">X</span> of <span id="total-comments">X</span></p>
+          <button id="prev-comments" class="page-button" disabled>Prev</button>
+        </div>
         <button id="delete-one-book">Delete this book</button>
         <button id="delete-all-comments">Delete all comments</button>
       </div>
@@ -51,5 +61,3 @@
   <script type="text/javascript" src="../public/client.js"></script>
 </body>
 </html>
-
-<!--add author, make comments deletable, search bar, make comments editable-->

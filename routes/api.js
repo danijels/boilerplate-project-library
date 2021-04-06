@@ -5,11 +5,12 @@ const Comment = require('../models/comment');
 module.exports = function (app) {
 
   app.route('/api/books')
-    .get(function (req, res){
-      Book.find({}, (err, books) => {
-        if (err) return res.json(err);
-
-        const result = books.map(book => ({ 
+    .get(function(req, res) {
+      Book.find()
+      .sort('-_id')
+      .limit(10)
+      .then(data => {
+        const result = data.map(book => ({ 
           title: book.title, 
           author: book.author,
           _id: book._id,
@@ -17,6 +18,7 @@ module.exports = function (app) {
         }));
         res.send(result);
       })
+      .catch(err => res.json(err));
     })
     
     .post(function (req, res) {  
@@ -48,12 +50,49 @@ module.exports = function (app) {
       })
     });
 
+  app.route('/api/books/count') 
+    .get(function (req, res) {
+      Book.countDocuments()
+      .then(num => res.json(num))
+      .catch(err => res.redirect('/'));
+    });
 
+  app.route('/api/books/next/:from')
+    .get(function(req, res) {
+      Book.find({ _id: {$gt: req.params.from} })  
+      .limit(10)
+      .then(data => {
+        const result = data.map(book => ({ 
+          title: book.title, 
+          author: book.author,
+          _id: book._id,
+          commentcount: book.comments.length 
+        }));
+        res.send(result.reverse());
+      })
+      .catch(err => res.redirect('/'));
+    });
+
+  app.route('/api/books/prev/:from')
+    .get(function(req, res) {
+      Book.find({ _id: {$lt: req.params.from} })
+      .sort('-_id')
+      .limit(10)
+      .then(data => {
+        const result = data.map(book => ({ 
+          title: book.title, 
+          author: book.author,
+          _id: book._id,
+          commentcount: book.comments.length 
+        }));
+        res.send(result);
+      })
+      .catch(err => res.redirect('/'));
+    });  
 
   app.route('/api/books/:id')
     .get(function (req, res){
       const bookid = req.params.id;
-      
       Book.findById(bookid)
       .then(book => book.populate('comments').execPopulate())
       .then(book => {
@@ -75,7 +114,8 @@ module.exports = function (app) {
       if (!commentText) return res.json('missing required field comment');
       
       const comment = new Comment({
-        content: commentText
+        content: commentText,
+        book: bookid
       });
 
       comment.save((err, doc) => {
@@ -111,6 +151,14 @@ module.exports = function (app) {
 
 
   app.route('/api/books/:id/comments')
+    .get(function (req, res) {
+        Comment.find({ 'book' : req.params.id })
+        .sort('-_id')
+        .limit(5)
+        .then(docs => res.json(docs))
+        .catch(err => res.redirect('/'));
+      })
+
     .delete((req, res) => {
       const id = req.params.id;
 
@@ -124,13 +172,37 @@ module.exports = function (app) {
       .catch(err => res.json('failed'))
     });
 
+  app.route('/api/books/:id/comments/count')
+    .get(function (req, res) {
+        Comment.find({ 'book' : req.params.id })
+        .countDocuments()
+        .then(num => res.json(num))
+        .catch(err => res.redirect('/'));
+      })
 
+  app.route('/api/books/:id/comments/next/:from')
+  .get(function(req, res) {
+    Comment.find({ _id: {$gt: req.params.from}, 'book': req.params.id })  
+    .limit(5)
+    .then(data => res.send(data.reverse()) )
+    .catch(err => res.redirect('/'));
+  });
+
+  app.route('/api/books/:id/comments/prev/:from')
+    .get(function(req, res) {
+      Comment.find({ _id: {$lt: req.params.from}, 'book': req.params.id })
+      .sort('-_id')
+      .limit(5)
+      .then(data => res.json(data))
+      .catch(err => res.redirect('/'));
+    });
+    
   app.route('/api/books/:bookid/comments/:id')
-    .delete(function(req, res) {
+    .delete(async function(req, res) {
       const bookId = req.params.bookid;
       const commentId = req.params.id;
 
-      Comment.findByIdAndDelete(commentId, (err, doc) => {
+      await Comment.findByIdAndDelete(commentId, (err, doc) => {
         if (err || !doc) return res.json('failed');
       });
 
@@ -146,4 +218,6 @@ module.exports = function (app) {
       .then(book => res.json('sucessful'))
       .catch(err => res.json('An error occured during removing the comment.'))
     });
+
+  
 };

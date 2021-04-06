@@ -3,6 +3,8 @@
 body {
   box-sizing: border-box;
   font-family: Raleway, sans-serif;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 
 button {
@@ -45,9 +47,15 @@ li {
 }
 
 main {
+  align-items: center;
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
+  flex-direction: row;
+  justify-content: center;
+}
+@media screen and (max-width: 800px) {
+  main {
+    flex-direction: column;
+  }
 }
 
 ul {
@@ -69,6 +77,19 @@ ul {
   width: 65%;
 }
 
+.pagination {
+  display: flex;
+  justify-content: space-between;
+}
+
+  .page-button {
+    box-shadow: none;
+    font-weight: bold;
+  }
+  .page-button:hover {
+    font-weight: normal;
+  }
+
 .time-tag {
   bottom: 0;
   font-size: 0.7rem;
@@ -89,4 +110,9 @@ ul {
 
 #message {
   visibility: hidden;
+}
+
+#right {
+  padding: 2rem;
+  width: 38rem;
 }
