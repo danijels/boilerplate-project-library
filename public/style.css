@@ -84,9 +84,6 @@ ul {
   justify-content: center;
   margin: 0.5rem 0;
 }
-  #new-book-submit {
-    align-self: center;
-  }
 
 .pagination {
   display: flex;
