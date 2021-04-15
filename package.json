@@ -8,7 +8,8 @@
 	},
 	"scripts": {
 		"devstart": "nodemon server.js",
-		"start": "node server.js"
+		"start": "node server.js",
+		"test": "mocha --timeout 10000 --recursive --exit --ui tdd test/"
 	},
 	"dependencies": {
 		"body-parser": "^1.15.2",
@@ -21,7 +22,7 @@
 		"luxon": "^1.26.0",
 		"mocha": "^8.3.2",
 		"mongodb": "^3.6.2",
-		"mongoose": "^5.12.1",
+		"mongoose": "^5.12.3",
 		"nodemon": "^2.0.7",
 		"zombie": "^6.1.4"
 	},

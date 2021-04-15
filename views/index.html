@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1 viewport-fit=cover" />
   <title>Library</title>
   <link rel="stylesheet" type="text/css" href="../public/style.css" />
 </head>
@@ -11,11 +12,6 @@
   </header>
   <main>
     <div id="left">
-      <form id="get-book-form">
-        <label for="get-book-text">Book ID</label>
-        <input type="text" name="get-book-text" id="get-book-text" required/>
-        <button id="get-book-submit">Show the book</button>
-      </form>
       <form id="new-book-form">
         <label for="new-book-title" class="new-book">
           <span>Title </span><input type="text" name="new-book-title" id="new-book-title" required/>
@@ -28,7 +24,7 @@
       <ul id="book-list"></ul>
       <div class="pagination">
         <button id="next-books" class="page-button" disabled>Next</button>
-        <p><span id="curr-books">X</span> of <span id="total-books">X</span></p>
+        <p><span id="curr-books">0</span> of <span id="total-books">0</span></p>
         <button id="prev-books" class="page-button" disabled>Prev</button>
       </div>
       <button id="delete-all-books">Delete all books</button>
@@ -47,7 +43,7 @@
         <ul id="comments"></ul>
         <div class="pagination">
           <button id="next-comments" class="page-button" disabled>Next</button>
-          <p><span id="curr-comments">X</span> of <span id="total-comments">X</span></p>
+          <p><span id="curr-comments">0</span> of <span id="total-comments">0</span></p>
           <button id="prev-comments" class="page-button" disabled>Prev</button>
         </div>
         <button id="delete-one-book">Delete this book</button>

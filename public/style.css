@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap');
 
+html {
+  padding: env(safe-area-inset);
+}
+
 body {
   box-sizing: border-box;
   font-family: Raleway, sans-serif;
@@ -13,9 +17,11 @@ button {
   border-radius: 0.3rem;
   box-shadow: 0 0 0.3rem;
   font-family: inherit;
+  height: 2rem;
   margin: 0.2rem;
-  padding: 0.4rem;
   outline: none;
+  padding: 0.4rem;
+  user-select: none;
 } 
 button:focus {
   border: 0.1rem solid;
@@ -65,17 +71,22 @@ ul {
 .books {
   background-color: rgb(200, 200, 200);
   box-shadow: 0 0 0.1rem;
+  max-width: 23rem;
 }
 .books:hover {
   box-shadow: none;
 }
 
 .new-book {
+  align-items: center;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   margin: 0.5rem 0;
-  width: 65%;
 }
+  #new-book-submit {
+    align-self: center;
+  }
 
 .pagination {
   display: flex;
@@ -112,7 +123,21 @@ ul {
   visibility: hidden;
 }
 
+#left {
+  display: flex;
+  flex-direction: column;
+}
+  #left button {
+    align-self: center;
+  }
+
 #right {
+  align-self: flex-start;
   padding: 2rem;
-  width: 38rem;
+  min-width: 17rem;
+}
+@media screen and (max-width: 800px) {
+  #right {
+    align-self: center;
+  }
 }

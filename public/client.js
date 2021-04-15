@@ -1,5 +1,3 @@
-const $getBookText = document.getElementById('get-book-text');
-const $getBookSubmit = document.getElementById('get-book-submit');
 const $newBookTitle = document.getElementById('new-book-title');
 const $newBookAuthor = document.getElementById('new-book-author');
 const $newBookSubmit = document.getElementById('new-book-submit');
@@ -34,6 +32,12 @@ function toggleDisabled($curr, $total, $next, $prev) {
     else $prev.disabled = false;
 }
 
+function showError(message) {
+    $bookDetail.style.visibility = 'hidden';
+    $messages.innerText = message;
+    $messages.style.visibility = 'visible';
+}
+
 /*===========Book list related events and functions===============*/
 
 async function getBooks() {
@@ -44,10 +48,13 @@ async function getBooks() {
     let total = await dataTotal.json();
     total = Math.ceil(Number(total) / 10);
 
-    $currBooks.innerText = '1';
-    $totalBooks.innerText = total || '1';
+    if (!parsed.error && !total.error) {
+        $currBooks.innerText = '1';
+        $totalBooks.innerText = total || '1';
 
-    makeList(parsed);
+        makeList(parsed);
+    } else showError(parsed.error);
+    
 };
 
 function makeList(list) {
@@ -70,16 +77,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     getBooks();
 });
 
-$getBookSubmit.onclick = (e) => {
-    e.preventDefault();
-    showBook($getBookText.value);
-}
-
 $newBookSubmit.onclick = async (e) => {
     e.preventDefault();
-
-    $bookDetail.style.visibility = 'hidden';
-    $messages.style.visibility = 'visible';
 
     const title = $newBookTitle.value;
     $newBookTitle.value = '';
@@ -95,10 +94,11 @@ $newBookSubmit.onclick = async (e) => {
       body: JSON.stringify({ "title": title, "author": author, "comments": [] })
     });
     const parsed = await data.json();
-    getBooks();
 
-    if (parsed.title) $messages.innerText = 'You successfully added the book.'
-    else $messages.innerText = parsed;
+    if (parsed.title) {
+        getBooks();
+        showBook(parsed._id);
+    }   else if (parsed.error) showError(parsed.error);
 }
 
 $nextBooks.onclick = async (e) => {
@@ -108,10 +108,13 @@ $nextBooks.onclick = async (e) => {
 
     const data = await fetch(`/api/books/next/${firstId}`);
     const parsed = await data.json();
-    makeList(parsed);
 
-    $currBooks.innerText = Number($currBooks.innerText) - 1;
-    toggleDisabled($currBooks, $totalBooks, $nextBooks, $prevBooks);  
+    if (!parsed.error) {
+        makeList(parsed);
+
+        $currBooks.innerText = Number($currBooks.innerText) - 1;
+        toggleDisabled($currBooks, $totalBooks, $nextBooks, $prevBooks);  
+    }
 }
 
 $prevBooks.onclick = async (e) => {
@@ -121,26 +124,24 @@ $prevBooks.onclick = async (e) => {
     
     const data = await fetch(`/api/books/prev/${lastId}`);
     const parsed = await data.json();
-    makeList(parsed);  
-    
-    $currBooks.innerText = Number($currBooks.innerText) + 1;
-    toggleDisabled($currBooks, $totalBooks, $nextBooks, $prevBooks);  
+
+    if (!parsed.error) {
+        makeList(parsed);  
+        
+        $currBooks.innerText = Number($currBooks.innerText) + 1;
+        toggleDisabled($currBooks, $totalBooks, $nextBooks, $prevBooks);  
+    }
 }
 
 $deleteAllBooks.onclick = async () => {
     $bookDetail.style.visibility = 'hidden';
-    $messages.style.visibility = 'visible';
+    $messages.style.visibility = 'hidden';
 
     const response = await fetch("/api/books", { method: 'DELETE' });
     const parsed = await response.json();
 
-    if (parsed == 'complete delete successful') {
-        $messages.innerText = 'You succesfully deleted the entire library.';
-        getBooks();
-    } else {
-        $messages.innerText = 'Something went wrong. The books are not deleted. Please try again.';
-        getBooks();
-    }
+    if (parsed == 'success') getBooks()
+    else if (parsed.error) showError(parsed.error);
 }
 
 /*==============Book detail related functions and events==============*/
@@ -149,32 +150,26 @@ async function showBook(passedId) {
     const data = await fetch(`/api/books/${passedId}`, { method: 'GET' });
     const book = await data.json();
 
-    if (!book.title) {
-        $bookDetail.style.visibility = 'hidden';
-        $messages.style.visibility = 'visible';
-        $messages.innerText = 'Sorry, we couldn\'t find this book...'
-        return;
-    }
+    if (book.error) return showError(book.error);
 
     $messages.style.visibility = 'hidden';
     $bookDetail.style.visibility = 'visible';
     $bookTitle.innerText = `${book.title}, ${book.author}`;
     $id.innerText = book._id;
 
-    getComments(passedId);
+    getComments(passedId, book.commentcount);
 }
 
-async function getComments(id) {
+async function getComments(id, total) {
     const data = await fetch(`/api/books/${id}/comments`);
     const parsed = await data.json();  
 
-    const dataTotal = await fetch(`/api/books/${id}/comments/count`);
-    const total = await dataTotal.json();
-
     $currComments.innerText = '1';
-    $totalComments.innerText = Math.ceil(total / 5) || '1';
 
-    makeComList(parsed);
+    if (!parsed.error) {
+        $totalComments.innerText = Math.ceil(total / 5) || '1';
+        makeComList(parsed);
+    } 
 }
 
 function makeComList(list) {
@@ -210,8 +205,11 @@ async function deleteComment(e) {
 
     const data = await fetch(`/api/books/${bookId}/comments/${commId}`, { method: "DELETE" });
     const parsed = await data.json();
-    showBook(bookId);
-    getBooks();
+
+    if (parsed === 'success') {
+        showBook(bookId);
+        getBooks();
+    }
 }
 
 $submitComment.onclick = async (e) => {
@@ -230,15 +228,10 @@ $submitComment.onclick = async (e) => {
 
     const parsed = await data.json();
 
-    if (parsed.title) {
-        getComments($id.innerText)
+    if (parsed === 'success') {
+        showBook($id.innerText);
         getBooks();
-    }
-    else {
-        $bookDetail.style.visibility = 'hidden';
-        $messages.innerText = parsed;
-        $messages.style.visibility = 'visible';
-    }
+    }   else if (parsed.error) showError(parsed.error);
 }
 
 $nextComments.onclick = async (e) => {
@@ -249,10 +242,13 @@ $nextComments.onclick = async (e) => {
 
     const data = await fetch(`/api/books/${id}/comments/next/${firstId}`);
     const parsed = await data.json();
-    makeComList(parsed);
 
-    $currComments.innerText = Number($currComments.innerText) - 1;
-    toggleDisabled($currComments, $totalComments, $nextComments, $prevComments); 
+    if (!parsed.error) {
+        makeComList(parsed);
+
+        $currComments.innerText = Number($currComments.innerText) - 1;
+        toggleDisabled($currComments, $totalComments, $nextComments, $prevComments); 
+    }
 }
 
 $prevComments.onclick = async (e) => {
@@ -263,10 +259,13 @@ $prevComments.onclick = async (e) => {
 
     const data = await fetch(`/api/books/${id}/comments/prev/${lastId}`);
     const parsed = await data.json();
-    makeComList(parsed);
 
-    $currComments.innerText = Number($currComments.innerText) + 1;
-    toggleDisabled($currComments, $totalComments, $nextComments, $prevComments); 
+    if (!parsed.error) {
+        makeComList(parsed);
+
+        $currComments.innerText = Number($currComments.innerText) + 1;
+        toggleDisabled($currComments, $totalComments, $nextComments, $prevComments); 
+    }
 }
 
 $deleteOneBook.onclick = async (e) => {
@@ -275,13 +274,10 @@ $deleteOneBook.onclick = async (e) => {
     const data = await fetch(`/api/books/${$id.innerText}`, { method: "DELETE" });
     const parsed = await data.json();
 
-    $bookDetail.style.visibility = 'hidden';
-    $messages.innerText = parsed === 'delete successful' 
-    ? 'The book was deleted successfully' 
-    : 'Something went wrong. The book was not deleted. Please try again.';
-    $messages.style.visibility = 'visible'; 
-
-    getBooks();
+    if (!parsed.error) {
+        $bookDetail.style.visibility = 'hidden';
+        getBooks();
+    }   else showError(parsed.error);
 }
 
 $deleteAllComments.onclick = async (e) => {
@@ -291,8 +287,7 @@ $deleteAllComments.onclick = async (e) => {
     const data = await fetch(`/api/books/${id}/comments`, { method: 'DELETE' });
     const parsed = await data.json();
 
-    if (parsed === 'successful') {
-        getComments(id);
+    if (parsed === 'success') {
         getBooks();
         showBook(id);
     } 

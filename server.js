@@ -6,10 +6,11 @@ const cors        = require('cors');
 const compression = require('compression');
 require('dotenv').config();
 
-const apiRoutes         = require('./routes/api.js');
+const apiRoutes = require('./routes/api.js');
 
 const mongoose = require('mongoose');
-mongoose.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true });
+let db = process.env.NODE_ENV === 'test' ? process.env.TEST_DB : process.env.DB;
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -43,6 +44,9 @@ app.use(function(req, res, next) {
 //Start our server and tests!
 app.listen(process.env.PORT || 3000, function () {
   console.log("Listening on port " + process.env.PORT);
+  if(process.env.NODE_ENV==='test') {
+    console.log('Running Tests...');    
+  }
 });
 
 module.exports = app; //for unit/functional testing

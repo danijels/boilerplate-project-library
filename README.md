@@ -2,4 +2,8 @@
 
 The finished project.
 
-
+Added functionality:
+- deleting individual comments
+- time stamps on comments
+- pagination
+- author's name for the books
