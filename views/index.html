@@ -5,14 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1 viewport-fit=cover" />
   <title>Library</title>
   <link rel="stylesheet" type="text/css" href="../public/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
     <h1>Library</h1>
   </header>
   <main>
-    <div id="left">
+    <div id="new-book">
       <form id="new-book-form">
+        <legend>Add a new book</legend>
         <label for="new-book-title" class="new-book">
           <span>Title </span><input type="text" name="new-book-title" id="new-book-title" required/>
         </label>
@@ -21,33 +25,38 @@
         </label>
         <button id="new-book-submit">Submit</button>
       </form>
-      <ul id="book-list"></ul>
-      <div class="pagination">
-        <button id="next-books" class="page-button" disabled>Next</button>
-        <p><span id="curr-books">0</span> of <span id="total-books">0</span></p>
-        <button id="prev-books" class="page-button" disabled>Prev</button>
-      </div>
-      <button id="delete-all-books">Delete all books</button>
     </div>
-  
-    <div id="right">
-      <p id="messages"></p>
-      <div id="book-detail">
-        <h2 id="book-title"></h2>
-        <p id="current-book-id"></p>
-        <form id="comment-form">
-          <label for="comment-text">Comment</label>
-          <input type="text" name="comment-text" id="comment-text" required/>
-          <button id="comment-submit">Add the comment</button>
-        </form>        
-        <ul id="comments"></ul>
+    
+    <div id="books">
+      <div id="left">
+        <ul id="book-list"></ul>
         <div class="pagination">
-          <button id="next-comments" class="page-button" disabled>Next</button>
-          <p><span id="curr-comments">0</span> of <span id="total-comments">0</span></p>
-          <button id="prev-comments" class="page-button" disabled>Prev</button>
+          <button id="next-books" class="page-button" disabled>Next</button>
+          <p><span id="curr-books">0</span> of <span id="total-books">0</span></p>
+          <button id="prev-books" class="page-button" disabled>Prev</button>
         </div>
-        <button id="delete-one-book">Delete this book</button>
-        <button id="delete-all-comments">Delete all comments</button>
+        <button id="delete-all-books">Delete all books</button>
+      </div>
+      
+      <div id="right">
+        <p id="messages"></p>
+        <div id="book-detail">
+          <h2 id="book-title"></h2>
+          <p id="current-book-id"></p>
+          <form id="comment-form">
+            <label for="comment-text">Comment</label>
+            <input type="text" name="comment-text" id="comment-text" required/>
+            <button id="comment-submit">Add the comment</button>
+          </form>        
+          <ul id="comments"></ul>
+          <div class="pagination">
+            <button id="next-comments" class="page-button" disabled>Next</button>
+            <p><span id="curr-comments">0</span> of <span id="total-comments">0</span></p>
+            <button id="prev-comments" class="page-button" disabled>Prev</button>
+          </div>
+          <button id="delete-one-book">Delete this book</button>
+          <button id="delete-all-comments">Delete all comments</button>
+        </div>
       </div>
     </div>
   </main>
