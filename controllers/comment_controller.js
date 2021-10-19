@@ -10,7 +10,10 @@ exports.get_comments = (req, res) => {
   .sort('-_id')
   .limit(5)
   .then(docs => res.json(docs))
-  .catch(err => res.json({ 'error': `Couldn't get the comments.` }));
+  .catch(err => {
+    console.log('here!');
+    res.json({ 'error': `Couldn't get the comments.` })
+  });
 }
 
 //POST controllers

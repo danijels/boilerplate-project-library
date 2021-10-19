@@ -66,7 +66,7 @@ function makeList(list) {
       bookItem.className = 'books';
       bookItem.id = book._id;
       const format = book.commentcount == 1 ? 'comment' : 'comments';
-      bookItem.innerText = `${book.title}, ${book.author}, ${book.commentcount} ${format}`;
+      bookItem.innerHTML = `<p class="title">${book.title}</p> <p class="author">${book.author}</p> <p>${book.commentcount} ${format}</p>`;
       $bookList.appendChild(bookItem);
     });
 
@@ -162,7 +162,8 @@ async function showBook(passedId) {
 
 async function getComments(id, total) {
     const data = await fetch(`/api/books/${id}/comments`);
-    const parsed = await data.json();  
+    const parsed = await data.json();
+    console.log(parsed);  
 
     $currComments.innerText = '1';
 

@@ -18,6 +18,7 @@ button {
   border-radius: 0.3rem;
   box-shadow: 0 0 0.3rem;
   font-family: inherit;
+  font-weight: bold;
   height: 2rem;
   margin: 0.2rem;
   outline: none;
@@ -43,7 +44,7 @@ h1, h2 {
 }
 
 h1 {
-  background-color: rgba(67, 79, 83, 0.7);
+  background-color: rgba(88, 66, 42, 0.7);
   color: white;
   margin: 0;
   padding: 0.7rem;
@@ -54,12 +55,13 @@ header {
   margin: 0;  
   position: fixed;
   top: 0;  
-  width: 100%;
+  width: 100vw;
 }
 
 input {
-  background-color: rgba(203, 181, 139, 1);
+  background-color: inherit;
   border: none;
+  border-bottom: white dotted 0.1rem;
 }
 
 input[type='text']:focus {
@@ -71,8 +73,6 @@ legend {
 }
 
 li {
-  display: flex;
-  justify-content: space-between;
   list-style-type: none;
   margin: 0.3rem;
   padding: 1rem;
@@ -91,17 +91,27 @@ li {
 } */
 
 ul {
+  /* display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; */
   padding: 0;
 }
 
 .books {
-  background-color: rgb(200, 200, 200);
-  box-shadow: 0 0 0.1rem;
-  max-width: 23rem;
+  background-color: rgb(198, 179, 151);
+  box-shadow: 0 0 0.6rem;
+  min-width: 10rem;
+  max-width: 95%;
 }
-.books:hover {
-  box-shadow: none;
-}
+  .books:hover {
+    box-shadow: none;
+  }
+  .title {
+    font-family: "Abril Fatface", serif;
+  }
+  .author {
+    font-weight: bold;
+  }
 
 .new-book {
   align-items: center;
@@ -131,10 +141,13 @@ ul {
   right: 0;
 }
 
-#comments li {
-  text-align: left;
+.comments {
   border: 0.1rem solid rgb(200, 200, 200);
+  display: flex;
+  justify-content: space-between; 
   position: relative;
+  text-align: left;
+  max-width: 100%;
 }
 
 #book-detail {
@@ -154,7 +167,7 @@ ul {
 
   #new-book-form {
     align-items: center;
-    background-color: rgba(67, 79, 83, 0.7);
+    background-color: rgba(88, 66, 42, 0.7);
     color: white;
     display: flex;
     flex-direction: column;  
@@ -163,14 +176,26 @@ ul {
     padding: 1rem 3rem;
   }
 
-#books {
+#books {  
+  align-items: center;
+  background-color: rgba(88, 66, 50);
   display: flex;
-  justify-content: space-around;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding-bottom: 2rem;
 }
+  @media screen and (max-width: 800px) {
+    #books {
+      flex-direction: column;
+    }
+  }
 
   #left {
     display: flex;
+    flex: 4;
     flex-direction: column;
+    justify-content: center;
+    padding: 0 2rem;
   }
     #left button {
       align-self: center;
@@ -178,11 +203,16 @@ ul {
 
   #right {
     align-self: flex-start;
+    color: white;
+    flex: 2;
+    max-width: 100%;
     padding: 2rem;
-    min-width: 17rem;
   }
-  @media screen and (max-width: 800px) {
-    #right {
-      align-self: center;
+    @media screen and (max-width: 800px) {
+      #right {
+        align-self: center;
+      }
     }
-  }
+    #comment-form {
+      background-color: rgba(88, 66, 50, 0.7);
+    }

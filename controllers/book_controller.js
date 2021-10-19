@@ -2,11 +2,13 @@
 const Book = require('../models/book');
 const Comment = require('../models/comment');
 
+const bookLimit = 9;
+
 //GET controllers
 exports.get_books = (req, res) => {
 	return Book.find()
 	.sort('-_id')
-	.limit(10)
+	.limit(bookLimit)
 	.then(data => {
 		const result = data.map(book => ({ 
 		  title: book.title, 
@@ -97,7 +99,7 @@ exports.next_books = (req, res) => {
 
 	Book
 	.find({ _id: {$gt: fr} })  
-  .limit(10)
+  .limit(bookLimit)
   .then(data => {
     const result = data.map(book => ({ 
       title: book.title, 
@@ -116,7 +118,7 @@ exports.prev_books = (req, res) => {
 	Book
 	.find({ _id: {$lt: fr} })
   .sort('-_id')
-  .limit(10)
+  .limit(bookLimit)
   .then(data => {
     const result = data.map(book => ({ 
       title: book.title, 
