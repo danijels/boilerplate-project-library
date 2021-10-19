@@ -163,7 +163,6 @@ async function showBook(passedId) {
 async function getComments(id, total) {
     const data = await fetch(`/api/books/${id}/comments`);
     const parsed = await data.json();
-    console.log(parsed);  
 
     $currComments.innerText = '1';
 
